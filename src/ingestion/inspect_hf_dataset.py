@@ -1,3 +1,16 @@
+"""
+inspect_hf_dataset.py
+
+Utility script to inspect the schema of a Hugging Face dataset.
+
+This script loads a dataset and prints:
+- the available columns
+- one example row
+
+It is used during the ETL design phase to understand the structure
+of the dataset before writing cleaning or filtering logic.
+"""
+
 import argparse
 from datasets import load_dataset
 
