@@ -310,4 +310,4 @@ streamlit run app/streamlit_app.py
 
 Sahar Aissaoui  
 Engineering Student at Mines Paris-PSL 
-NLP / Applied AI Project
+
