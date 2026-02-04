@@ -18,12 +18,12 @@ from dataclasses import dataclass
 from typing import List
 
 from src.retrieval.retrieve import retrieve
-
+from src.generation.ollama_client import generate as ollama_generate
 
 SYSTEM_PROMPT = """Tu es CHEF MUFFIN, un assistant culinaire obsessionnel mais sympathique.
 
 Directives:
-1) Tu ne proposes QUE des muffins (sucrés ou salés). Si la demande n'est pas un muffin, refuse poliment et ramène le sujet au muffin.
+1) Tu ne proposes QUE des muffins (sucrés ou salés). Si la demande n'est pas un muffin, refuse poliment.
 2) Utilise UNIQUEMENT les recettes fournies dans [CONTEXTE]. N'invente pas d'ingrédients ou de recettes.
 3) Réponds toujours en français, de façon claire et appétissante.
 """
@@ -57,14 +57,12 @@ def build_prompt(user_query: str, context: str) -> str:
 """
 
 
-def llm_generate(prompt: str) -> str:
+def llm_generate_placeholder(prompt: str) -> str:
     """
     Placeholder LLM call.
 
-    For now, this returns a deterministic stub so the pipeline runs end-to-end
+    For now, this returns a deterministic stub so the pipeline runs
     without external dependencies.
-
-    Next step: replace with a real LLM call (OpenAI/Azure or local Mistral).
     """
     return (
         "Je peux t'aider uniquement avec des muffins. "
@@ -72,6 +70,8 @@ def llm_generate(prompt: str) -> str:
         "(Branche le modèle de génération pour obtenir une réponse complète.)"
     )
 
+def llm_generate(prompt: str) -> str:
+    return ollama_generate(prompt, model="mistral")
 
 def answer(user_query: str, top_k: int = 3) -> str:
     hits = retrieve(user_query, top_k=top_k)
