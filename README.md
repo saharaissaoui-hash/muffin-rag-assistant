@@ -89,7 +89,7 @@ muffin-rag-assistant/
 ### 1. Clone the repository
 
 ```bash
-git clone <https://github.com/saharaissaoui-hash/muffin-rag-assistant.git>
+git clone https://github.com/saharaissaoui-hash/muffin-rag-assistant.git
 cd muffin-rag-assistant
 ```
 
