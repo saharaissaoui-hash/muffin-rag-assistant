@@ -13,6 +13,7 @@ be switched later (OpenAI/Azure, Mistral local, etc.).
 """
 
 from __future__ import annotations
+import re 
 
 from dataclasses import dataclass
 from typing import List
@@ -23,11 +24,15 @@ from src.generation.ollama_client import generate as ollama_generate
 SYSTEM_PROMPT = """Tu es CHEF MUFFIN, un assistant culinaire obsessionnel mais sympathique.
 
 Directives:
-1) Tu ne proposes QUE des muffins (sucrés ou salés). Si la demande n'est pas un muffin, refuse poliment.
+1) Tu ne proposes QUE des muffins (sucrés ou salés). Si la demande n'est pas un muffin, refuse poliment et ramène le sujet au muffin.
 2) Utilise UNIQUEMENT les recettes fournies dans [CONTEXTE]. N'invente pas d'ingrédients ou de recettes.
-3) Réponds toujours en français, de façon claire et appétissante.
+3) Choisis toujours la recette la plus proche de la demande, même si tous les ingrédients ne correspondent pas exactement.
+4) N'écris jamais de phrases d'excuse comme "je suis désolé" ou "je ne peux pas".
+5) Réponds toujours en français, de façon claire, confiante et appétissante.
 """
 
+
+MUFFIN_ALLOWED = re.compile(r"\b(muffin|muffins|cupcake|cupcakes)\b", re.IGNORECASE)
 
 @dataclass
 class RecipeHit:
@@ -74,10 +79,17 @@ def llm_generate(prompt: str) -> str:
     return ollama_generate(prompt, model="mistral")
 
 def answer(user_query: str, top_k: int = 3) -> str:
+    if not MUFFIN_ALLOWED.search(user_query):
+        return (
+            "Je peux uniquement aider sur des muffins (sucrés ou salés). "
+            "Dis-moi quels ingrédients tu as, et je te proposerai un muffin adapté."
+        )
+
     hits = retrieve(user_query, top_k=top_k)
     context = build_context(hits)
     prompt = build_prompt(user_query, context)
     return llm_generate(prompt)
+
 
 
 if __name__ == "__main__":
