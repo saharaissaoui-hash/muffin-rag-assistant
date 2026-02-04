@@ -22,8 +22,8 @@ import streamlit as st
 ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT_DIR))
 
-from src.generation.chef_muffin import answer  # noqa: E402
-from src.retrieval.retrieve import retrieve  # noqa: E402
+from src.generation.chef_muffin import answer  
+from src.retrieval.retrieve import retrieve  
 
 
 st.set_page_config(page_title="Chef Muffin", page_icon="🧁", layout="centered")
